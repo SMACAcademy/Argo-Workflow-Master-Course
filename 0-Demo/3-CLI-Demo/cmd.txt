@@ -1,0 +1,18 @@
+argo submit hello-world.yaml -n argo
+
+kubectl config set-context --current --namespace=argo
+kubectl config set-context --current --namespace=default
+
+argo list
+
+argo get <workflow-name>
+
+argo logs <workflow-name> --follow
+
+argo suspend <workflow-name>
+
+argo resume <workflow-name>
+
+argo terminate <workflow-name>
+
+argo delete <workflow-name>
