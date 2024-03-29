@@ -7,7 +7,7 @@ minikube start -p argowf --driver=virtualbox --no-vtx-check
 
 kubectl create namespace argo
 kubectl apply -n argo -f https://github.com/argoproj/argo-workflows/releases/download/v3.5.5/install.yaml
-
+kubectl apply -n argo -f https://github.com/argoproj/argo-workflows/releases/download/v3.5.5/quick-start-minimal.yaml
 
 kubectl patch deployment argo-server --namespace argo --type json --patch-file argo-server-patch.json
 
@@ -20,3 +20,5 @@ kubectl describe deployment.apps/argo-server -n argo
 kubectl delete namespace argo
 
 
+CLI Installation
+----------------
