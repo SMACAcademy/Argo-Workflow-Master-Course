@@ -3,3 +3,17 @@ argo submit hello-world.yaml -n argo
 argo list -n argo
 
 argo get <wf-name> -n argo
+
+################################
+
+Script Template
+---------------
+
+argo submit script-template-demo.yml
+
+argo watch <workflow-name>
+
+argo logs <workflow-name>
+
+
+

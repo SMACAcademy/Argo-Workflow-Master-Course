@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: script-template-demo-
+spec:
+  entrypoint: process-names
+  templates:
+  - name: process-names
+    script:
+      image: alpine:latest
+      command: [sh]
+      source: |
+        NAMES="Alice Bob Charlie"
+        echo "Filtered Names:"
+        for NAME in $NAMES; do
+          if [[ $NAME == *"a"* ]]; then
+            echo $NAME
+          fi
+        done
