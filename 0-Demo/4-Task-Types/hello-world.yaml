@@ -1,0 +1,11 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: hello-world-
+spec:
+  entrypoint: hello-world
+  templates:
+    - name: hello-world
+      container:
+        image: alpine:latest
+        command: [echo, "Hello, Argo Workflows!"]

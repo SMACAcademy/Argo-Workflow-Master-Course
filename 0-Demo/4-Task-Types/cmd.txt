@@ -1,0 +1,5 @@
+argo submit hello-world.yaml -n argo
+
+argo list -n argo
+
+argo get <wf-name> -n argo
