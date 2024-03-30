@@ -9,11 +9,11 @@ argo get <wf-name> -n argo
 Script Template
 ---------------
 
-argo submit script-template-demo.yml
+argo submit script-template-demo.yml -n argo
 
-argo watch <workflow-name>
+argo watch <workflow-name> -n argo
 
-argo logs <workflow-name>
+argo logs <workflow-name> -n argo
 
 
 
