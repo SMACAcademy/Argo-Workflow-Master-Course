@@ -18,7 +18,25 @@ argo logs <workflow-name> -n argo
 
 Resource Template
 ------------------
+# Make sure to create correct roles and role bindings
 
 argo submit create-deployment.yml -n argo
 
 argo submit delete-deployment.yml -n argo
+
+Suspend Template
+----------------
+
+argo submit suspend-template-demo.yaml -n argo
+
+argo resume <workflow-name> -n argo
+
+DAG demo
+--------
+
+argo submit basic-dag-workflow.yaml -n argo
+
+argo submit complex-dag-workflow.yaml -p branch=branch1 -n argo
+
+argo submit complex-dag-workflow.yaml -p branch=branch2 -n argo
+ 

@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: suspend-template-demo-
+spec:
+  entrypoint: main
+  templates:
+    - name: main
+      steps:
+        - - name: step-one
+            template: execute-step
+        - - name: approval-wait
+            template: manual-approval
+        - - name: final-step
+            template: execute-step
+
+    - name: execute-step
+      container:
+        image: alpine:latest
+        command: [sh, -c]
+        args: ["echo 'Executing step'; sleep 5"]
+
+    - name: manual-approval
+      suspend: {}
