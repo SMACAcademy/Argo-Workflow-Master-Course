@@ -1,0 +1,16 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: delete-deployment-
+spec:
+  entrypoint: delete-k8s-deployment
+  templates:
+  - name: delete-k8s-deployment
+    resource:
+      action: delete
+      manifest: |
+        apiVersion: apps/v1
+        kind: Deployment
+        metadata:
+          name: nginx-deployment
+          namespace: default

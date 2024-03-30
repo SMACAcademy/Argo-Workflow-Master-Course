@@ -16,4 +16,9 @@ argo watch <workflow-name> -n argo
 argo logs <workflow-name> -n argo
 
 
+Resource Template
+------------------
 
+argo submit create-deployment.yml
+
+argo submit delete-deployment.yml

@@ -7,8 +7,8 @@ spec:
   templates:
   - name: process-names
     script:
-      image: alpine:latest
-      command: [sh]
+      image: ubuntu:latest
+      command: [bash]
       source: |
         NAMES="Alice Bob Charlie"
         echo "Filtered Names:"
