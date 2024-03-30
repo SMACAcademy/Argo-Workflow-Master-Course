@@ -1,0 +1,37 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: simple-output-capture-
+spec:
+  entrypoint: capture-output
+  templates:
+  - name: capture-output
+    steps:
+    - - name: generate-output
+        template: output-generator
+    - - name: consume-output
+        template: output-consumer
+        arguments:
+          parameters:
+          - name: captured-output
+            value: "{{steps.generate-output.outputs.parameters.hello-output}}"
+
+  - name: output-generator
+    script:
+      image: alpine:latest
+      command: [sh]
+      source: |
+        echo -n "Hello, World!" > /tmp/hello.txt
+    outputs:
+      parameters:
+      - name: hello-output
+        valueFrom:
+          path: /tmp/hello.txt
+
+  - name: output-consumer
+    inputs:
+      parameters:
+      - name: captured-output
+    container:
+      image: alpine:latest
+      command: [echo, "{{inputs.parameters.captured-output}}"]

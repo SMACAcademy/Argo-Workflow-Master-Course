@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: global-parameters-
+spec:
+  entrypoint: use-global-parameter
+  arguments:
+    parameters:
+    - name: global-message
+      value: "Hello from Global Parameter"
+
+  templates:
+  - name: use-global-parameter
+    steps:
+    - - name: first-step
+        template: print-global-message
+    - - name: second-step
+        template: print-global-message
+
+  - name: print-global-message
+    container:
+      image: alpine:latest
+      command: [echo, "{{workflow.parameters.global-message}}"]

@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: input-params-customization-
+spec:
+  entrypoint: customized-tasks
+  templates:
+  - name: customized-tasks
+    steps:
+    - - name: task-with-input-one
+        template: parameterized-task
+        arguments:
+          parameters: [{name: input, value: "First execution"}]
+    - - name: task-with-input-two
+        template: parameterized-task
+        arguments:
+          parameters: [{name: input, value: "Second execution"}]
+
+  - name: parameterized-task
+    inputs:
+      parameters:
+      - name: input
+    container:
+      image: alpine:latest
+      command: [echo, "{{inputs.parameters.input}}"]

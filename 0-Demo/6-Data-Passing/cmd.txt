@@ -1,0 +1,20 @@
+argo submit global-parameters-workflow.yaml -n argo
+
+argo submit local-parameters-workflow.yaml -n argo
+
+
+Params 
+------
+
+argo submit input-parameters-customization.yaml -n argo
+
+argo submit dynamic-data-processing.yaml -n argo
+
+Output Params 
+-------------
+argo submit simple-output-capture.yaml -n argo
+
+argo submit complex-output-usage.yaml -n argo
+
+
+

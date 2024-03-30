@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: dynamic-data-processing-
+spec:
+  entrypoint: data-processing
+  templates:
+  - name: data-processing
+    steps:
+    - - name: process-data-file-one
+        template: data-task
+        arguments:
+          parameters: [{name: filename, value: "datafile1.txt"}]
+    - - name: process-data-file-two
+        template: data-task
+        arguments:
+          parameters: [{name: filename, value: "datafile2.txt"}]
+
+  - name: data-task
+    inputs:
+      parameters:
+      - name: filename
+    container:
+      image: alpine:latest
+      command: [sh, -c]
+      args: ["cat /path/to/data/{{inputs.parameters.filename}}"]

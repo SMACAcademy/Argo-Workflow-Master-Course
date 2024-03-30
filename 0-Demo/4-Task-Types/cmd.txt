@@ -31,6 +31,15 @@ argo submit suspend-template-demo.yaml -n argo
 
 argo resume <workflow-name> -n argo
 
+
+When condition
+--------------
+argo submit basic-conditional-execution.yaml -n argo
+
+argo submit advanced-conditional-execution.yaml -n argo
+
+
+
 DAG demo
 --------
 

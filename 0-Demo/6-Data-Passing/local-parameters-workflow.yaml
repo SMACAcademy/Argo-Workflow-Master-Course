@@ -1,0 +1,37 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: local-parameters-
+spec:
+  entrypoint: use-local-parameter
+  templates:
+  - name: use-local-parameter
+    steps:
+    - - name: generate-local-parameter
+        template: generate-parameter
+    - - name: use-parameter
+        template: use-parameter
+        arguments:
+          parameters:
+          - name: local-message
+            value: "{{steps.generate-local-parameter.outputs.parameters.local-value}}"
+
+  - name: generate-parameter
+    script:
+      image: alpine:latest
+      command: [sh]
+      source: |
+        echo -n "Hello from Local Parameter" > /tmp/local-value
+    outputs:
+      parameters:
+      - name: local-value
+        valueFrom:
+          path: /tmp/local-value
+
+  - name: use-parameter
+    inputs:
+      parameters:
+      - name: local-message
+    container:
+      image: alpine:latest
+      command: [echo, "{{inputs.parameters.local-message}}"]

@@ -24,7 +24,7 @@ spec:
       image: alpine:latest
       command: [sh]
       source: |
-        echo "pathA"
+        echo "pathB"
     
   - name: print-message
     inputs:

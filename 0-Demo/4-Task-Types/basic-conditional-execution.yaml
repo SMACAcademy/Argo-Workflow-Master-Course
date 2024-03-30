@@ -1,0 +1,28 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: basic-conditional-execution-
+spec:
+  entrypoint: conditional-execution-plan
+  templates:
+  - name: conditional-execution-plan
+    steps:
+    - - name: determine-path
+        template: generate-condition
+    - - name: execute-on-condition
+        template: conditional-step
+        when: "{{steps.determine-path.outputs.result}} == 'NOexecute'"
+
+  - name: generate-condition
+    script:
+      image: alpine:latest
+      command: [sh]
+      source: |
+        # Simulate condition generation logic
+        echo "execute"
+
+  - name: conditional-step
+    container:
+      image: alpine:latest
+      command: [echo]
+      args: ["Condition met, executing step."]

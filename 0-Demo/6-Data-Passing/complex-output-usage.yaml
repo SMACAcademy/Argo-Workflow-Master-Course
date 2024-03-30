@@ -1,0 +1,50 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: complex-output-usage-
+spec:
+  entrypoint: multi-step-processing
+  templates:
+  - name: multi-step-processing
+    steps:
+    - - name: initial-data-processing
+        template: data-processor
+    - - name: further-processing
+        template: data-processor
+        arguments:
+          parameters:
+          - name: input-data
+            value: "{{steps.initial-data-processing.outputs.parameters.processed-data}}"
+    - - name: final-step
+        template: finalizer
+        arguments:
+          parameters:
+          - name: final-data
+            value: "{{steps.further-processing.outputs.parameters.processed-data}}"
+
+  - name: data-processor
+    inputs:
+      parameters:
+      - name: input-data
+        default: "Initial Data"
+    script:
+      image: alpine:latest
+      command: [sh]
+      source: |
+        # Process the input data and generate new output
+        INPUT_DATA="{{inputs.parameters.input-data}}"
+        PROCESSED_DATA="${INPUT_DATA}-processed"
+        echo -n $PROCESSED_DATA > /tmp/processed.txt
+    outputs:
+      parameters:
+      - name: processed-data
+        valueFrom:
+          path: /tmp/processed.txt
+
+  - name: finalizer
+    inputs:
+      parameters:
+      - name: final-data
+    container:
+      image: alpine:latest
+      command: [echo, "Final data: {{inputs.parameters.final-data}}"]

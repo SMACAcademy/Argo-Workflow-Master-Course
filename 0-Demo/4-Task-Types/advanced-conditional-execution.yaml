@@ -1,0 +1,45 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: advanced-conditional-execution-
+spec:
+  entrypoint: conditional-execution-plan
+  templates:
+  - name: conditional-execution-plan
+    steps:
+    - - name: initialize
+        template: generate-multiple-conditions
+    - - name: execute-on-first-condition
+        template: first-conditional-step
+        when: "'{{steps.initialize.outputs.parameters.first-condition}}' == 'true'"
+    - - name: execute-on-second-condition
+        template: second-conditional-step
+        when: "'{{steps.initialize.outputs.parameters.second-condition}}' == 'false'"
+
+  - name: generate-multiple-conditions
+    script:
+      image: alpine:latest
+      command: [sh]
+      source: |
+        echo -n true > /tmp/first-condition
+        echo -n false > /tmp/second-condition
+    outputs:
+      parameters:
+      - name: first-condition
+        valueFrom:
+          path: /tmp/first-condition
+      - name: second-condition
+        valueFrom:
+          path: /tmp/second-condition
+
+  - name: first-conditional-step
+    container:
+      image: alpine:latest
+      command: [echo]
+      args: ["First condition met, executing relevant step."]
+
+  - name: second-conditional-step
+    container:
+      image: alpine:latest
+      command: [echo]
+      args: ["Second condition met, executing relevant step."]
