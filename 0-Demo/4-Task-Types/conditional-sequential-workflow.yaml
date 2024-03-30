@@ -1,0 +1,35 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: conditional-sequential-
+spec:
+  entrypoint: main
+  templates:
+  - name: main
+    steps:
+    - - name: check-condition
+        template: decide-path
+    - - name: conditional-step
+        template: print-message
+        when: "{{steps.check-condition.outputs.result}} == 'pathA'"
+        arguments:
+          parameters: [{name: message, value: "Executing path A"}]
+    - - name: final-step
+        template: print-message
+        arguments:
+          parameters: [{name: message, value: "This is always executed"}]
+
+  - name: decide-path
+    script:
+      image: alpine:latest
+      command: [sh]
+      source: |
+        echo "pathA"
+    
+  - name: print-message
+    inputs:
+      parameters:
+      - name: message
+    container:
+      image: alpine:latest
+      command: [echo, "{{inputs.parameters.message}}"]

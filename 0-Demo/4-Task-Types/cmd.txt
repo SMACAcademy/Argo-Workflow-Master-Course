@@ -39,4 +39,10 @@ argo submit basic-dag-workflow.yaml -n argo
 argo submit complex-dag-workflow.yaml -p branch=branch1 -n argo
 
 argo submit complex-dag-workflow.yaml -p branch=branch2 -n argo
- 
+
+Sequential workflow
+-------------------
+argo submit sequential-workflow.yaml -n argo
+
+argo submit conditional-sequential-workflow.yaml -n argo
+

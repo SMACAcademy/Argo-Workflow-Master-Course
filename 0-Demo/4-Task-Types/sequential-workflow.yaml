@@ -1,0 +1,29 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: sequential-demo-
+spec:
+  entrypoint: main
+  templates:
+  - name: main
+    steps:
+    - - name: first-step
+        template: print-message
+        arguments:
+          parameters: [{name: message, value: "This is the first step"}]
+    - - name: second-step
+        template: print-message
+        arguments:
+          parameters: [{name: message, value: "This is the second step"}]
+    - - name: third-step
+        template: print-message
+        arguments:
+          parameters: [{name: message, value: "This is the third step"}]
+
+  - name: print-message
+    inputs:
+      parameters:
+      - name: message
+    container:
+      image: alpine:latest
+      command: [echo, "{{inputs.parameters.message}}"]
