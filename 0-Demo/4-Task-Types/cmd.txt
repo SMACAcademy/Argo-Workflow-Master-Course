@@ -19,6 +19,6 @@ argo logs <workflow-name> -n argo
 Resource Template
 ------------------
 
-argo submit create-deployment.yml
+argo submit create-deployment.yml -n argo
 
-argo submit delete-deployment.yml
+argo submit delete-deployment.yml -n argo

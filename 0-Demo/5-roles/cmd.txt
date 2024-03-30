@@ -1,0 +1,2 @@
+kubectl apply -f argo-role.yaml
+kubectl apply -f argo-rolebinding.yaml
