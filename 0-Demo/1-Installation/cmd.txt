@@ -17,6 +17,19 @@ kubectl describe deployment.apps/argo-server -n argo
 
 kubectl delete namespace argo
 
+###############################################################################
 
-CLI Installation
-----------------
+Verify Namespaced or cluster wide Installation
+----------------------------------------------
+
+kubectl get configmap workflow-controller-configmap -n <argo-namespace> -o yaml
+
+'data:
+'  config: |
+'    namespace: argo # If it's set to a namespace name
+'    # OR
+'    namespace: "*" # If it's set for cluster-wide
+
+
+###############################################################################
+
