@@ -1,0 +1,14 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: parameterized-hello-world-template
+spec:
+  templates:
+  - name: parameterized-hello-world
+    inputs:
+      parameters:
+      - name: message
+    container:
+      image: alpine:latest
+      command: [echo]
+      args: ["{{inputs.parameters.message}}"]

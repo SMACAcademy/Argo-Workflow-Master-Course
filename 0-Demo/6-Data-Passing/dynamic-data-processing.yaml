@@ -23,4 +23,4 @@ spec:
     container:
       image: alpine:latest
       command: [sh, -c]
-      args: ["cat /path/to/data/{{inputs.parameters.filename}}"]
+      args: ["echo 'Sample content for {{inputs.parameters.filename}}' > /tmp/{{inputs.parameters.filename}} && cat /tmp/{{inputs.parameters.filename}}"]

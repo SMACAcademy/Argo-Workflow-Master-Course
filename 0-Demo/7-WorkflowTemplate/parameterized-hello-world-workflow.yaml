@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: parameterized-hello-world-workflow-
+spec:
+  entrypoint: parameterized-hello-world
+  arguments:
+    parameters:
+    - name: message
+      value: "Hello, Argo Workflows!"
+  templates:
+  - name: parameterized-hello-world
+    templateRef:
+      name: parameterized-hello-world-template
+      template: parameterized-hello-world
+    inputs:
+      parameters:
+      - name: message

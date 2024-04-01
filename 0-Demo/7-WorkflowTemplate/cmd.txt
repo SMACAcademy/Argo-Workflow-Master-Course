@@ -1,0 +1,11 @@
+argo template create hello-world-template.yaml -n argo
+
+argo submit hello-world-workflow.yaml -n argo
+
+argo template create parameterized-hello-world-template.yaml -n argo
+
+argo submit parameterized-hello-world-workflow.yaml -n argo
+
+argo template create data-processing-template.yaml -n argo
+
+argo submit data-processing-workflow.yaml -n argo

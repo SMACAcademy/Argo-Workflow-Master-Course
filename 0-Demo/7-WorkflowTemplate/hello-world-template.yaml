@@ -1,0 +1,11 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: hello-world-template
+spec:
+  templates:
+    - name: hello-world
+      container:
+        image: alpine:latest
+        command: [echo]
+        args: ["Hello World"]

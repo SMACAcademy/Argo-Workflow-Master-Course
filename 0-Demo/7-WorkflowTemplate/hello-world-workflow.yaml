@@ -1,0 +1,11 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: hello-world-workflow-
+spec:
+  entrypoint: hello-world
+  templates:
+    - name: hello-world
+      templateRef:
+        name: hello-world-template
+        template: hello-world
