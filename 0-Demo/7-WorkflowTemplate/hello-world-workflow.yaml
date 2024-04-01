@@ -3,9 +3,11 @@ kind: Workflow
 metadata:
   generateName: hello-world-workflow-
 spec:
-  entrypoint: hello-world
+  entrypoint: use-hello-world-template
   templates:
-    - name: hello-world
-      templateRef:
-        name: hello-world-template
-        template: hello-world
+  - name: use-hello-world-template
+    steps:
+    - - name: invoke-hello-world-template
+        templateRef:
+          name: hello-world-template
+          template: hello-world

@@ -3,16 +3,19 @@ kind: Workflow
 metadata:
   generateName: parameterized-hello-world-workflow-
 spec:
-  entrypoint: parameterized-hello-world
-  arguments:
-    parameters:
-    - name: message
-      value: "Hello, Argo Workflows!"
+  entrypoint: use-parameterized-hello-world-template
   templates:
-  - name: parameterized-hello-world
-    templateRef:
-      name: parameterized-hello-world-template
-      template: parameterized-hello-world
+  - name: use-parameterized-hello-world-template
     inputs:
       parameters:
       - name: message
+        value: "Hello, Argo Workflows!"
+    steps:
+    - - name: invoke-parameterized-hello-world-template
+        templateRef:
+          name: parameterized-hello-world-template
+          template: parameterized-hello-world
+        arguments:
+          parameters:
+          - name: message
+            value: "{{inputs.parameters.message}}"
