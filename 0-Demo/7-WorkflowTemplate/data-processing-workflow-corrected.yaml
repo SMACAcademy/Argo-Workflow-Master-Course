@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: data-processing-workflow-
+spec:
+  entrypoint: process-data
+  arguments:
+    parameters:
+    - name: files
+      value: '["file1.txt", "file2.txt", "file3.txt"]'
+  templates:
+  - name: process-data
+    steps:
+    - - name: invoke-process-data-template
+        templateRef:
+          name: data-processing-template
+          template: process-data
+        arguments:
+          parameters:
+          - name: files
+            value: "{{workflow.parameters.files}}"

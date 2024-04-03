@@ -1,0 +1,1 @@
+argo submit image_processing_workflow.yaml -n argo

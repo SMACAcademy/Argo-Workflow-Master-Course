@@ -1,0 +1,61 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: image-processing-
+spec:
+  entrypoint: process-images
+  templates:
+  - name: download
+    inputs:
+      parameters:
+        - name: input-image
+    outputs:
+      artifacts:
+        - name: downloaded-image
+          path: /tmp/image.jpg
+    container:
+      image: busybox
+      command: [sh, -c]
+      args: ["wget -O /tmp/image.jpg {{inputs.parameters.input-image}}"]
+  - name: process
+    inputs:
+      artifacts:
+        - name: downloaded-image
+          path: /tmp/image.jpg
+    outputs:
+      artifacts:
+        - name: processed-image
+          path: /tmp/processed_image.jpg
+    container:
+      image: busybox
+      command: [sh, -c]
+      args: ["echo 'Processing image' && cp /tmp/image.jpg /tmp/processed_image.jpg"]
+  - name: upload
+    inputs:
+      artifacts:
+        - name: processed-image
+          path: /tmp/processed_image.jpg
+    container:
+      image: busybox
+      command: [sh, -c]
+      args: ["echo 'Uploading processed image: /tmp/processed_image.jpg'"]
+  - name: process-images
+    steps:
+      - - name: download
+          template: download
+          arguments:
+            parameters:
+              - name: input-image
+                value: "http://example.com/image.jpg"
+      - - name: process
+          template: process
+          arguments:
+            artifacts:
+              - name: downloaded-image
+                from: "{{steps.download.outputs.artifacts.downloaded-image}}"
+      - - name: upload
+          template: upload
+          arguments:
+            artifacts:
+              - name: processed-image
+                from: "{{steps.process.outputs.artifacts.processed-image}}"

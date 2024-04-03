@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: data-processing-template
+spec:
+  templates:
+  - name: process-data
+    inputs:
+      parameters:
+      - name: files
+    steps:
+    - - name: process-file
+        template: process-file
+        arguments:
+          parameters:
+          - name: file
+            value: "{{item}}"
+        withParam: "{{inputs.parameters.files}}"
+
+  - name: process-file
+    inputs:
+      parameters:
+      - name: file
+    container:
+      image: alpine:latest
+      command: [echo, "Processing file: {{inputs.parameters.file}}"]

@@ -8,4 +8,9 @@ argo submit parameterized-hello-world-workflow.yaml -n argo
 
 argo template create data-processing-template.yaml -n argo
 
+argo template create data-processing-template-corrected.yaml -n argo
+
 argo submit data-processing-workflow.yaml -n argo
+
+argo submit data-processing-workflow-corrected.yaml -n argo
+
