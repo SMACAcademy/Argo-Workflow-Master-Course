@@ -1,0 +1,57 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: example-outputs-as-inputs-
+spec:
+  entrypoint: main
+  arguments:
+    parameters:
+    - name: workflow-param-1
+      value: "Hello, Argo Workflows!"
+
+  templates:
+  - name: main
+    dag:
+      tasks:
+      - name: step-A
+        template: step-template-a
+        arguments:
+          parameters:
+          - name: template-param-1
+            value: "{{workflow.parameters.workflow-param-1}}"
+      - name: step-B
+        dependencies: [step-A]
+        template: step-template-b
+        arguments:
+          parameters:
+          - name: template-param-2
+            value: "{{tasks.step-A.outputs.parameters.output-param-1}}"
+
+  - name: step-template-a
+    inputs:
+      parameters:
+      - name: template-param-1
+    outputs:
+      parameters:
+      - name: output-param-1
+        valueFrom:
+          path: /tmp/output.txt
+    container:
+      image: alpine:latest
+      command: [sh, -c]
+      args: ["echo '{{inputs.parameters.template-param-1}}' > /tmp/output.txt"]
+      volumeMounts:
+      - name: workdir
+        mountPath: /tmp
+    volumes:
+      - name: workdir
+        emptyDir: {}
+
+  - name: step-template-b
+    inputs:
+      parameters:
+      - name: template-param-2
+    container:
+      image: alpine:latest
+      command: [sh, -c]
+      args: ["echo 'Received: {{inputs.parameters.template-param-2}}'"]

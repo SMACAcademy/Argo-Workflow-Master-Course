@@ -1,0 +1,1 @@
+argo submit -n argo workflow-inputs.yaml -p workflow-param-1=abcd --watch

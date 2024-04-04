@@ -1,0 +1,34 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: timeout-example-
+spec:
+  entrypoint: main
+  activeDeadlineSeconds: 3600 # Overall workflow timeout (1 hour)
+  templates:
+  - name: main
+    steps:
+    - - name: step-one
+        template: long-running-task
+        arguments:
+          parameters:
+          - name: duration
+            value: "10m"
+    - - name: step-two
+        template: quick-task
+
+  - name: long-running-task
+    inputs:
+      parameters:
+      - name: duration
+    container:
+      image: alpine:latest
+      command: [sh, -c]
+      args: ["sleep {{inputs.parameters.duration}}"]
+    activeDeadlineSeconds: 600 # Timeout for this step (10 minutes)
+
+  - name: quick-task
+    container:
+      image: alpine:latest
+      command: [sh, -c]
+      args: ["echo Quick Task Completed!"]

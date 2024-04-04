@@ -29,3 +29,11 @@ argo submit workflow-with-cluster-template.yaml -n argo
 argo cluster-template create cwt-template-with-ep-and-args.yaml
 argo submit cwt-workflow-passing-args.yaml -n argo
 argo submit cwt-workflow-templats-args.yaml -n argo
+
+##################################################
+
+Cron workflow 
+
+argo cron create cron.yaml -n argo
+argo cron list -n argo
+argo cron get test-cron-wf -n argo
