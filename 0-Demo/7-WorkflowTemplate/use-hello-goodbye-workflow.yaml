@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: hello-goodbye-workflow-
+spec:
+  entrypoint: hello-goodbye
+  templates:
+    - name: hello-goodbye
+      steps:
+        - - name: say-hello
+            templateRef:
+              name: hello-goodbye-template
+              template: hello-step
+              clusterScope: true
+        - - name: say-goodbye
+            templateRef:
+              name: hello-goodbye-template
+              template: goodbye-step
+              clusterScope: true

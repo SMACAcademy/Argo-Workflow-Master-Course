@@ -1,0 +1,16 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ClusterWorkflowTemplate
+metadata:
+  name: hello-goodbye-template
+spec:
+  templates:
+    - name: hello-step
+      container:
+        image: alpine
+        command: [echo]
+        args: ["Hello, Argo Workflows!"]
+    - name: goodbye-step
+      container:
+        image: alpine
+        command: [echo]
+        args: ["Goodbye, Argo Workflows!"]

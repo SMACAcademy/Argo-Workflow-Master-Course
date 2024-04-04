@@ -14,3 +14,12 @@ argo submit data-processing-workflow.yaml -n argo
 
 argo submit data-processing-workflow-corrected.yaml -n argo
 
+argo template create hello-goodbye-cwt.yaml
+
+argo template list --kind ClusterWorkflowTemplate
+
+argo submit use-hello-goodbye-workflow.yaml -n argo
+
+argo cluster-template create cluster-workflow-template.yaml
+
+argo submit workflow-with-cluster-template.yaml -n argo
