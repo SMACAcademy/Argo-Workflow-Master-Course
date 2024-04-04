@@ -21,5 +21,11 @@ argo template list --kind ClusterWorkflowTemplate
 argo submit use-hello-goodbye-workflow.yaml -n argo
 
 argo cluster-template create cluster-workflow-template.yaml
+argo cluster-template list
 
 argo submit workflow-with-cluster-template.yaml -n argo
+
+
+argo cluster-template create cwt-template-with-ep-and-args.yaml
+argo submit cwt-workflow-passing-args.yaml -n argo
+argo submit cwt-workflow-templats-args.yaml -n argo
