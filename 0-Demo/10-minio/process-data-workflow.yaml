@@ -1,0 +1,33 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: process-data-workflow-
+spec:
+  entrypoint: process-data
+  serviceAccountName: argo
+
+  templates:
+  - name: process-data
+    inputs:
+      parameters:
+      - name: results-file-path
+        value: /tmp/results.txt
+    container:
+      image: alpine:latest
+      command: [sh, -c]
+      args: ["echo Hello World > /tmp/results.txt"]
+    outputs:
+      artifacts:
+      - name: output-results
+        path: /tmp/results.txt
+        s3:
+          endpoint: minio:9000  # Using the internal DNS name for MinIO within the same namespace
+          bucket: my-bucket
+          key: results/results.txt
+          accessKeySecret:
+            name: my-minio-cred  # Adjust if your setup uses a different secret name
+            key: accesskey
+          secretKeySecret:
+            name: my-minio-cred  # Adjust if your setup uses a different secret name
+            key: secretkey
+          insecure: true  # True if not using HTTPS; adjust according to your MinIO setup
