@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: loop-example-
+spec:
+  entrypoint: process-items
+  templates:
+    - name: process-items
+      steps:
+        - - name: process-each-item
+            template: process-item
+            arguments:
+              parameters:
+                - name: item
+                  value: "{{item}}"
+            withItems:
+              - item1
+              - item2
+              - item3
+    - name: process-item
+      inputs:
+        parameters:
+          - name: item
+      container:
+        image: alpine
+        command: [echo]
+        args: ["Processing: {{inputs.parameters.item}}"]

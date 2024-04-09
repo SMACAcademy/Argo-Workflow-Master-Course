@@ -1,0 +1,7 @@
+argo submit empty-dir-pattern.yaml -n argo --watch
+
+kubectl apply -f cron-backfill-pattern.yaml -n argo
+
+argo template create workflow-of-workflow-template.yaml -n argo
+
+argo submit workflow-of-workflow.yaml -n argo

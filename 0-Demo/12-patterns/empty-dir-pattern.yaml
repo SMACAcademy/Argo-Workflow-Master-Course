@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: empty-dir-
+spec:
+  entrypoint: main
+  templates:
+    - name: main
+      container:
+        image: argoproj/argosay:v2
+        command: [sh, -c]
+        args: ["cowsay hello world | tee /mnt/out/hello_world.txt"]
+        volumeMounts:
+          - name: out
+            mountPath: /mnt/out
+      volumes:
+        - name: out
+          emptyDir: { }
+      outputs:
+        parameters:
+          - name: message
+            valueFrom:
+              path: /mnt/out/hello_world.txt

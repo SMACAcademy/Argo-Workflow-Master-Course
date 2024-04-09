@@ -1,0 +1,58 @@
+kubectl apply -f service-account.yaml
+
+kubectl apply -f role-binding.yaml
+
+kubectl apply -f sa-token-secret.yaml
+
+
+kubectl get serviceaccount argo-workflows-user -n argo -o=jsonpath='{.secrets[0].name}'
+
+kubectl get secret <secret_name> -n argo -o=jsonpath='{.data.token}' | base64 --decode
+
+~~~~~~~~~~~
+
+kubectl create role jenkins --verb=list,update --resource=workflows.argoproj.io
+
+kubectl create sa jenkins
+
+kubectl create rolebinding jenkins --role=jenkins --serviceaccount=argo:jenkins
+
+kubectl apply -f - <<EOF
+apiVersion: v1
+kind: Secret
+metadata:
+  name: jenkins.service-account-token
+  annotations:
+    kubernetes.io/service-account.name: jenkins
+type: kubernetes.io/service-account-token
+EOF
+
+
+ARGO_TOKEN="Bearer $(kubectl get secret jenkins.service-account-token -o=jsonpath='{.data.token}' | base64 --decode)"
+echo $ARGO_TOKEN
+Bearer ZXlKaGJHY2lPaUpTVXpJMU5pSXNJbXRwWkNJNkltS...
+
+curl https://localhost:2746/api/v1/workflows/argo -H "Authorization: $ARGO_TOKEN"
+# 200 OK
+
+ARGO_SERVER="${{HOST}}:443"
+KUBECONFIG=/dev/null
+ARGO_NAMESPACE=sandbox
+
+kubectl delete secret $SECRET
+
+kubectl apply -f argo-workflows-role.yaml
+kubectl apply -f argo-workflows-rolebinding.yaml
+
+
+
+kubectl apply -f argo-workflows-clusterrole.yaml
+kubectl apply -f argo-workflows-clusterrolebinding.yaml
+
+~~~~~~~~~~~~~~~~
+
+kubectl apply -f argo-workflows-role.yaml
+
+kubectl apply -f argo-workflows-clusterrole.yaml
+
+~~~~~~~~~~~~~~~~~
