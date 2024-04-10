@@ -1,1 +1,7 @@
 argo submit -n argo workflow-inputs.yaml -p workflow-param-1=abcd --watch
+
+argo submit workflow-withItems.yaml -n argo --watch
+
+argo submit recursive-workflow.yaml -n argo --watch
+
+argo submit -n argo --from=workflowtemplate/workflow-priority-control.yaml --priority 10

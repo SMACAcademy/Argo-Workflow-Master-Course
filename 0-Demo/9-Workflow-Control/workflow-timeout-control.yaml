@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: timeouts-demo-
+spec:
+  entrypoint: whalesay
+  activeDeadlineSeconds: 120 # Workflow-wide timeout
+  templates:
+  - name: whalesay
+    timeoutSeconds: 60 # Template-level timeout
+    container:
+      image: docker/whalesay:latest
+      command: [cowsay]
+      args: ["hello world"]
+      resources:
+        limits:
+          memory: 32Mi
+          cpu: 100m
