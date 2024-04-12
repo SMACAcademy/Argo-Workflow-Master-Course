@@ -1,0 +1,46 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: ci-pipeline-
+spec:
+  entrypoint: ci-pipeline
+  templates:
+    - name: ci-pipeline
+      steps:
+        - - name: build-application
+            template: build
+        - - name: test-application
+            template: test
+        - - name: package-application
+            template: package
+
+    - name: build
+      container:
+        image: docker:latest
+        command: [sh, -c]
+        args: ["docker build -t my-application:latest ."]
+        volumeMounts:
+          - name: docker-socket
+            mountPath: /var/run/docker.sock
+
+    - name: test
+      container:
+        image: my-application:latest
+        command: [sh, -c]
+        args: ["pytest"]
+
+    - name: package
+      container:
+        image: docker:latest
+        command: [sh, -c]
+        args: ["docker save my-application:latest > /mnt/output/my-application.tar"]
+        volumeMounts:
+          - name: output
+            mountPath: /mnt/output
+
+  volumes:
+    - name: docker-socket
+      hostPath:
+        path: /var/run/docker.sock
+    - name: output
+      emptyDir: {}

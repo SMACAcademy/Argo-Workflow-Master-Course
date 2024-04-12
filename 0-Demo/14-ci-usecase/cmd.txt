@@ -1,0 +1,26 @@
+argo submit ci-pipeline.yaml --watch -n argo
+
+
+
+Docker Build
+~~~~~~~~~~~~
+
+docker build -t my-application:latest .
+
+docker run --name my-application my-application:latest
+
+docker run --name my-application-test my-application:latest pytest
+
+
+
+
+
+Run Test Locally
+
+pip install pytest
+
+pytest
+
+
+docker run --rm my-application:latest pytest
+

@@ -1,0 +1,6 @@
+kubectl apply -f webhook-event-source.yaml
+
+kubectl apply -f webhook-sensor.yaml
+
+curl -d '{"message":"Hello, Argo!"}' -H "Content-Type: application/json" -X POST http://<your-cluster-ip>:12000/example
+

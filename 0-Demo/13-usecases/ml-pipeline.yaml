@@ -1,0 +1,56 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: ml-pipeline-
+spec:
+  entrypoint: ml-pipeline
+  templates:
+    - name: ml-pipeline
+      steps:
+        - - name: preprocess-data
+            template: preprocess
+        - - name: train-model
+            template: train
+        - - name: evaluate-model
+            template: evaluate
+
+    - name: preprocess
+      container:
+        image: python:3.7
+        command: [sh, -c]
+        args: [
+          "pip install numpy && \
+          python -c \"import numpy as np; np.random.seed(0); X = np.random.rand(100, 10); y = np.random.randint(0, 2, 100); np.savez('/mnt/data/dataset.npz', X=X, y=y)\""
+        ]
+        volumeMounts:
+          - name: data-volume
+            mountPath: /mnt/data
+
+    - name: train
+      container:
+        image: python:3.7
+        command: [sh, -c]
+        args: [
+          "pip install numpy scikit-learn joblib && \
+          python -c \"import numpy as np; from sklearn.linear_model import LogisticRegression; dataset = np.load('/mnt/data/dataset.npz'); model = LogisticRegression(); model.fit(dataset['X'], dataset['y']); import joblib; joblib.dump(model, '/mnt/data/model.joblib')\""
+        ]
+        volumeMounts:
+          - name: data-volume
+            mountPath: /mnt/data
+
+    - name: evaluate
+      container:
+        image: python:3.7
+        command: [sh, -c]
+        args: [
+          "pip install scikit-learn joblib && \
+          python -c \"import joblib; model = joblib.load('/mnt/data/model.joblib'); print('Model evaluation metrics...')\""
+        ]
+        volumeMounts:
+          - name: data-volume
+            mountPath: /mnt/data
+
+  volumes:
+    - name: data-volume
+      persistentVolumeClaim:
+        claimName: ml-data-pvc

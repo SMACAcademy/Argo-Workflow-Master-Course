@@ -1,0 +1,18 @@
+minikube start -p argowfsa --driver=docker
+
+
+
+
+kubectl create namespace argo-demo
+
+kubectl apply -n argo-demo -f https://raw.githubusercontent.com/argoproj/argo-workflows/stable/manifests/install.yaml
+
+kubectl apply -f service-account.yaml
+
+kubectl apply -f role-binding.yaml
+
+kubectl apply -f hello-workflow.yaml
+
+argo submit --watch hello-workflow.yaml -n argo-demo
+
+

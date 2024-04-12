@@ -1,0 +1,1 @@
+argo submit ml-pipeline.yaml --watch -n argo
