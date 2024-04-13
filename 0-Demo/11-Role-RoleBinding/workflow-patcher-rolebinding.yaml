@@ -1,0 +1,13 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: workflow-patcher-binding
+  namespace: argo
+subjects:
+- kind: ServiceAccount
+  name: default
+  namespace: argo
+roleRef:
+  kind: Role
+  name: workflow-patcher
+  apiGroup: rbac.authorization.k8s.io

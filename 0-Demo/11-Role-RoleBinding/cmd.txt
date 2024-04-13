@@ -26,3 +26,12 @@ argo submit basic-dag-workflow.yaml --serviceaccount jenkins
 
 argo submit basic-dag-workflow.yaml --serviceaccount jenkins -n argo
 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+kubectl auth can-i patch workflows --as=system:serviceaccount:argo:default -n argo
+
+kubectl apply -f workflow-patcher-role.yaml -n argo
+kubectl apply -f workflow-patcher-rolebinding.yaml -n argo
+
+kubectl delete -f workflow-patcher-role.yaml -n argo
+kubectl delete -f workflow-patcher-rolebinding.yaml -n argo
