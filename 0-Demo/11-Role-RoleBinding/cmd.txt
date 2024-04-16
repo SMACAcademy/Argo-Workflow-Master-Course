@@ -35,3 +35,13 @@ kubectl apply -f workflow-patcher-rolebinding.yaml -n argo
 
 kubectl delete -f workflow-patcher-role.yaml -n argo
 kubectl delete -f workflow-patcher-rolebinding.yaml -n argo
+
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+kubectl apply -f workflow-configmap-patch-role.yaml -n argo
+kubectl apply -f workflow-configmap-patch-rolebinding.yaml -n argo
+
+kubectl delete -f workflow-configmap-patch-role.yaml -n argo
+kubectl delete -f workflow-configmap-patch-rolebinding.yaml -n argo
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
